@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {SidebarService} from '../../shared/services/sidebar.service';
 
 @Component({
@@ -10,16 +10,22 @@ export class SidebarComponent implements OnInit {
   showMain = true;
   showBrowse = false;
 
-  constructor(private sidebarService: SidebarService) { }
+  constructor(
+    private sidebarService: SidebarService,
+    private cdr: ChangeDetectorRef
+  ) { }
+
   ngOnInit(): void {
     this.sidebarService.main.subscribe(
       value => {
         this.showMain = value;
+        this.cdr.detectChanges();
       }
     );
     this.sidebarService.browse.subscribe(
       value => {
         this.showBrowse = value;
+        this.cdr.detectChanges();
       }
     );
   }

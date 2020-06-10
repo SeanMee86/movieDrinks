@@ -5,9 +5,11 @@ import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {BrowseMoviesComponent} from './components/browse-movies/browse-movies.component';
 
 const routes: Routes = [
-  { path: '', component: DashboardComponent },
+  { path: 'dashboard', component: DashboardComponent },
   { path: 'search', component: MovieSearchComponent },
-  { path: 'browse', component: BrowseMoviesComponent }
+  { path: 'browse', component: BrowseMoviesComponent },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+
 ];
 
 @NgModule({
