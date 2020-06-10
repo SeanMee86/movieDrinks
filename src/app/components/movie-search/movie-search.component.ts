@@ -8,6 +8,7 @@ import {
   switchMap
 } from 'rxjs/operators';
 import {SidebarService} from '../../shared/services/sidebar.service';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-movie-search',
@@ -18,7 +19,11 @@ export class MovieSearchComponent implements OnInit {
   movies$: Observable<Movie[]>;
   private searchTerms = new Subject<string>();
 
-  constructor(private movieService: MovieService) { }
+  constructor(
+    private movieService: MovieService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
     this.movies$ = this.searchTerms.pipe(
@@ -30,5 +35,9 @@ export class MovieSearchComponent implements OnInit {
 
   search(term: string): void {
     this.searchTerms.next(term);
+  }
+
+  loadMovie(id: string) {
+    this.router.navigate([id], {relativeTo: this.route})
   }
 }

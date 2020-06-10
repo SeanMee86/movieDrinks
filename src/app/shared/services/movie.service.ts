@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Movie } from '../models/movie.model';
-import { apiKey } from '../../config/apiKey';
-import { map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {Movie} from '../models/movie.model';
+import {apiKey} from '../../config/apiKey';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovieService {
 
+  movies: Movie[] = [];
   private movieUrl = `http://www.omdbapi.com/?apikey=${apiKey}&type=movie&s=`;
 
   constructor(private http: HttpClient) { }
@@ -19,7 +20,7 @@ export class MovieService {
       .pipe<Movie[]>(
         map(data => {
           if (data.Search) {
-            return data.Search
+            this.movies = data.Search
               .map((movie) => {
                 return {
                   title: movie.Title,
@@ -28,8 +29,16 @@ export class MovieService {
                   id: movie.imdbID
                 };
               });
+            return this.movies;
           }
         })
       );
+  }
+
+  getMovie(id: string) {
+    const movieToLoad = this.movies.filter(movie => movie.id === id);
+    if (movieToLoad.length === 1) {
+      return movieToLoad[0];
+    }
   }
 }

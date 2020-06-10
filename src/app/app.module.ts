@@ -15,6 +15,7 @@ import { BrowseSidebarComponent } from './layouts/sidebar/browse-sidebar/browse-
 import { MainContentComponent } from './layouts/main-content/main-content.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BrowseMoviesComponent } from './components/browse-movies/browse-movies.component';
+import { LoadedMovieComponent } from './components/loaded-movie/loaded-movie.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { BrowseMoviesComponent } from './components/browse-movies/browse-movies.
     BrowseSidebarComponent,
     MainContentComponent,
     DashboardComponent,
-    BrowseMoviesComponent
+    BrowseMoviesComponent,
+    LoadedMovieComponent
   ],
   imports: [
     BrowserModule,

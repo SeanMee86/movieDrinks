@@ -17,7 +17,9 @@
 <div class="row">
   <div class="col-12">
     <ul class="movies-list">
-      <li class="movie" *ngFor="let movie of movies$ | async">
+      <li
+        class="movie" *ngFor="let movie of movies$ | async"
+        (click)="loadMovie(movie.id)">
         <app-movie [movie]="movie"></app-movie>
       </li>
     </ul>
