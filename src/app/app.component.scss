@@ -1,0 +1,19 @@
+.mainBottom {
+  min-height: 100vh;
+
+  .mainContent {
+    min-height: 90vh;
+  }
+
+  hr {
+    margin-bottom: 0;
+  }
+
+  .sidebar {
+    border-right: 1px solid #eee;
+  }
+
+  .mainBody {
+    padding: 2rem;
+  }
+}
