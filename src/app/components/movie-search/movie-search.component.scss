@@ -1,3 +1,17 @@
 input {
   max-width: 400px;
 }
+
+.movies-list {
+  list-style-type: none;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  align-items: center;
+  padding: 0;
+
+  .movie {
+    padding: 2rem;
+    align-self: start;
+  }
+}

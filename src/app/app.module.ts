@@ -5,21 +5,29 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
-import { MoviesComponent } from './components/movie-search/movies/movies.component';
 import { MovieSearchComponent } from './components/movie-search/movie-search.component';
-import { MovieComponent } from './components/movie-search/movies/movie/movie.component';
+import { MovieComponent } from './components/movie-search/movie/movie.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HeaderComponent } from './layouts/header/header.component';
 import { SidebarComponent } from './layouts/sidebar/sidebar.component';
+import { MainSidebarComponent } from './layouts/sidebar/main-sidebar/main-sidebar.component';
+import { BrowseSidebarComponent } from './layouts/sidebar/browse-sidebar/browse-sidebar.component';
+import { MainContentComponent } from './layouts/main-content/main-content.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { BrowseMoviesComponent } from './components/browse-movies/browse-movies.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MoviesComponent,
     MovieSearchComponent,
     MovieComponent,
     HeaderComponent,
-    SidebarComponent
+    SidebarComponent,
+    MainSidebarComponent,
+    BrowseSidebarComponent,
+    MainContentComponent,
+    DashboardComponent,
+    BrowseMoviesComponent
   ],
   imports: [
     BrowserModule,

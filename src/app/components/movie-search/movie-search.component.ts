@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../shared/services/movie.service';
-import { NgForm } from '@angular/forms';
-import {Router} from '@angular/router';
+import { Movie } from '../../shared/models/movie.model';
+import { Observable, Subject } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  switchMap
+} from 'rxjs/operators';
+import {SidebarService} from '../../shared/services/sidebar.service';
 
 @Component({
   selector: 'app-movie-search',
@@ -9,12 +15,20 @@ import {Router} from '@angular/router';
   styleUrls: ['./movie-search.component.scss']
 })
 export class MovieSearchComponent implements OnInit {
+  movies$: Observable<Movie[]>;
+  private searchTerms = new Subject<string>();
+
   constructor(private movieService: MovieService) { }
 
   ngOnInit(): void {
+    this.movies$ = this.searchTerms.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((term: string) => this.movieService.findMovie(term))
+    );
   }
 
-  onSubmit(form: NgForm) {
-    this.movieService.findMovie(form.controls.movieName.value);
+  search(term: string): void {
+    this.searchTerms.next(term);
   }
 }

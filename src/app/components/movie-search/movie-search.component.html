@@ -1,25 +1,25 @@
 <div class="row">
   <div class="col-12 col-md-8">
-    <form (ngSubmit)="onSubmit(f)" #f=ngForm>
-      <div class="">
-        <div class="form-group">
-          <label for="movieName">Movie Name</label>
-          <input
-            id="movieName"
-            class="form-control"
-            name="movieName"
-            type="text"
-            ngModel/>
-        </div>
-        <button
-          class="btn btn-primary"
-          type="submit">Search Movie</button>
-      </div>
-    </form>
+    <div class="form-group">
+      <label for="movieName">Enter Movie Title</label>
+      <input
+        id="movieName"
+        class="form-control"
+        name="movieName"
+        type="text"
+        #searchBox
+        (input)="search(searchBox.value)"
+        ngModel/>
+    </div>
   </div>
 </div>
+
 <div class="row">
   <div class="col-12">
-    <app-movies></app-movies>
+    <ul class="movies-list">
+      <li class="movie" *ngFor="let movie of movies$ | async">
+        <app-movie [movie]="movie"></app-movie>
+      </li>
+    </ul>
   </div>
 </div>
