@@ -17,6 +17,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BrowseMoviesComponent } from './components/browse-movies/browse-movies.component';
 import { LoadedMovieComponent } from './components/loaded-movie/loaded-movie.component';
 import { ModalComponent } from './layouts/modal/modal.component';
+import { SpinnerComponent } from './components/ui/spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ModalComponent } from './layouts/modal/modal.component';
     DashboardComponent,
     BrowseMoviesComponent,
     LoadedMovieComponent,
-    ModalComponent
+    ModalComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,

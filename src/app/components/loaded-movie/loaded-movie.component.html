@@ -1,5 +1,9 @@
-<div *ngIf="movie">
+<div *ngIf="movie && !showSpinner">
   <h3>{{movie.title}}</h3>
   <p>{{movie.year}}</p>
   <img src="{{movie.poster}}" alt="{{movie.title}}">
+</div>
+
+<div *ngIf="showSpinner">
+ <app-spinner></app-spinner>
 </div>

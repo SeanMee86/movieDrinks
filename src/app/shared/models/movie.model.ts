@@ -3,4 +3,5 @@ export interface Movie {
   poster?: string;
   year?: string;
   id: string;
+  category?: string;
 }
