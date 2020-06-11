@@ -16,6 +16,7 @@ import { MainContentComponent } from './layouts/main-content/main-content.compon
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BrowseMoviesComponent } from './components/browse-movies/browse-movies.component';
 import { LoadedMovieComponent } from './components/loaded-movie/loaded-movie.component';
+import { ModalComponent } from './layouts/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { LoadedMovieComponent } from './components/loaded-movie/loaded-movie.com
     MainContentComponent,
     DashboardComponent,
     BrowseMoviesComponent,
-    LoadedMovieComponent
+    LoadedMovieComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

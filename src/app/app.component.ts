@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalService } from './shared/services/modal.service';
 
 @Component({
   selector: 'app-root',
@@ -6,8 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
-  constructor() { }
+  showModal: boolean;
+  constructor(private modalService: ModalService) { }
 
   ngOnInit(): void {
+    this.modalService.shouldShowModal.subscribe(
+      value => {
+        this.showModal = value;
+      }
+    );
   }
 }
