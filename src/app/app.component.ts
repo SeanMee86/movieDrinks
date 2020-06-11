@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalService } from './shared/services/modal.service';
+import { UiService } from './shared/services/ui.service';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +8,10 @@ import { ModalService } from './shared/services/modal.service';
 })
 export class AppComponent implements OnInit{
   showModal: boolean;
-  constructor(private modalService: ModalService) { }
+  constructor(private uiService: UiService) { }
 
   ngOnInit(): void {
-    this.modalService.shouldShowModal.subscribe(
+    this.uiService.shouldShowModal.subscribe(
       value => {
         this.showModal = value;
       }
