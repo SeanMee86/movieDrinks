@@ -7,8 +7,7 @@ import {
   distinctUntilChanged,
   switchMap
 } from 'rxjs/operators';
-import {SidebarService} from '../../shared/services/sidebar.service';
-import {ActivatedRoute, Router} from "@angular/router";
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-movie-search',
@@ -38,6 +37,6 @@ export class MovieSearchComponent implements OnInit {
   }
 
   loadMovie(id: string) {
-    this.router.navigate([id], {relativeTo: this.route})
+    this.router.navigate([id], {relativeTo: this.route});
   }
 }

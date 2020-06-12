@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {UiService} from '../../../shared/services/ui.service';
 import {Router} from '@angular/router';
+import {FirebaseService} from '../../../shared/services/firebase.service';
 
 @Component({
   selector: 'app-modal',
@@ -11,23 +12,25 @@ export class ModalComponent implements OnInit {
 
   constructor(
     private uiService: UiService,
-    private router: Router
+    private router: Router,
+    private fbService: FirebaseService
   ) { }
 
   ngOnInit(): void {
   }
 
-  onCreateGame() {
+  onCreateFBData() {
     this.uiService.sendMovieToFB().subscribe(
-      _ => {
+      response => {
+        this.fbService.getMovie(response.name);
         this.uiService.hideModal();
         this.uiService.hideSpinner();
       }
     );
   }
 
-  onCancelGame() {
-    this.router.navigate(['/search']);
+  onCancelFBData() {
+    this.router.navigate(['/movies']);
     this.uiService.hideModal();
   }
 }

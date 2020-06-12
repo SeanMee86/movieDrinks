@@ -17,14 +17,16 @@ import { Subscription } from 'rxjs';
 })
 export class LoadedMovieComponent implements OnInit, OnDestroy {
   movie: Movie;
+  movieFBKey: string;
   id: string;
   showSpinner = true;
   spinnerSub: Subscription;
+  loadedMovieSub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
-    private movieService: MovieService,
     private router: Router,
+    private movieService: MovieService,
     private uiService: UiService,
     private fbService: FirebaseService
   ) { }
@@ -35,26 +37,41 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
         this.showSpinner = value;
       }
     );
+
+    this.loadedMovieSub = this.fbService.loadMovie.subscribe(
+      value => {
+        this.movie = value[Object.keys(value)[0]];
+        this.movieFBKey = Object.keys(value)[0];
+      }
+    );
+
     if (this.movieService.movies.length > 0) {
       this.id = this.route.snapshot.params.id;
       this.fbService.getMovies().subscribe(
         fbMovies => {
-          const movie = fbMovies.find(fbMovie => fbMovie.id === this.id);
+          const movie = fbMovies.find(fbMovie => {
+            for (const key in fbMovie) {
+              if (fbMovie[key].id === this.id) {
+                return fbMovie;
+              }
+            }
+          });
           if (!movie) {
             this.movie = this.movieService.getMovie(this.id);
             this.uiService.showModal(this.movie);
           } else {
-            this.movie = movie;
+            this.fbService.loadMovie.next(movie);
             this.showSpinner = false;
           }
         }
       );
     } else {
-      this.router.navigate(['/search']);
+      this.router.navigate(['/movies']);
     }
   }
 
   ngOnDestroy(): void {
     this.spinnerSub.unsubscribe();
+    this.loadedMovieSub.unsubscribe();
   }
 }
