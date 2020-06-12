@@ -1,7 +1,11 @@
 <div class="add-movie-prompt">
   <div class="movie-prompt-inner">
+    <div>
+      <p>A game has not been created for this movie yet, would you like to start one?</p>
+    </div>
     <div class="btn-group">
-      <button class="btn btn-primary" (click)="onCreateGame()">Create Game?</button>
+      <button class="btn btn-primary" (click)="onCreateGame()">Yes</button>
+      <button class="btn btn-danger" (click)="onCancelGame()">No</button>
     </div>
   </div>
 </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {UiService} from '../../../shared/services/ui.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-modal',
@@ -8,7 +9,10 @@ import {UiService} from '../../../shared/services/ui.service';
 })
 export class ModalComponent implements OnInit {
 
-  constructor(private uiService: UiService) { }
+  constructor(
+    private uiService: UiService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
   }
@@ -20,5 +24,10 @@ export class ModalComponent implements OnInit {
         this.uiService.hideSpinner();
       }
     );
+  }
+
+  onCancelGame() {
+    this.router.navigate(['/search']);
+    this.uiService.hideModal();
   }
 }
