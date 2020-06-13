@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {UiService} from '../../../shared/services/ui.service';
-import {Router} from '@angular/router';
-import {FirebaseService} from '../../../shared/services/firebase.service';
+import { UiService } from '../../../shared/services/ui.service';
+import { Router } from '@angular/router';
+import { FirebaseService } from '../../../shared/services/firebase.service';
 
 @Component({
   selector: 'app-modal',

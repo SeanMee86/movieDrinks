@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {Movie} from '../models/movie.model';
-import {apiKey} from '../../config/apiKey';
-import {map} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Movie } from '../models/movie.model';
+import { apiKey } from '../../config/apiKey';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,8 @@ export class MovieService {
                   title: movie.Title,
                   poster: movie.Poster,
                   year: movie.Year,
-                  id: movie.imdbID
+                  id: movie.imdbID,
+                  rules: []
                 };
               });
             return this.movies;

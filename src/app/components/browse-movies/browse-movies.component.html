@@ -1,3 +1,6 @@
-<p>browse-movies works!</p>
-<button class="btn btn-warning" (click)="getMoviesFB()">Get FB Data</button>
-
+<div *ngIf="!showSpinner">
+  <p>browse-movies works!</p>
+</div>
+<div *ngIf="showSpinner">
+  <app-spinner></app-spinner>
+</div>

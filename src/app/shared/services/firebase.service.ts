@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Movie } from '../models/movie.model';
 import { HttpClient } from '@angular/common/http';
-import {map} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +39,9 @@ export class FirebaseService {
         this.loadMovie.next(fbMovies.find(fbMovie => Object.keys(fbMovie)[0] === fbKey));
       }
     );
+  }
+
+  updateMovie(fbKey: string, data: {rules: string[]}) {
+    return this.http.patch(this.rootURL + '/movies/' + fbKey + '.json', data);
   }
 }

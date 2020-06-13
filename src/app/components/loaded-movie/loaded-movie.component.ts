@@ -22,6 +22,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
   showSpinner = true;
   spinnerSub: Subscription;
   loadedMovieSub: Subscription;
+  newRule: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -67,6 +68,23 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
       );
     } else {
       this.router.navigate(['/movies']);
+    }
+  }
+
+  onAddRule() {
+    if (this.movie.rules) {
+      const updatedRules = [...this.movie.rules, this.newRule];
+      this.fbService.updateMovie(this.movieFBKey, {rules: updatedRules}).subscribe(
+        _ => {
+          this.fbService.getMovie(this.movieFBKey);
+        }
+      );
+    } else {
+      this.fbService.updateMovie(this.movieFBKey, { rules: [this.newRule]}).subscribe(
+        _ => {
+          this.fbService.getMovie(this.movieFBKey);
+        }
+      );
     }
   }
 
