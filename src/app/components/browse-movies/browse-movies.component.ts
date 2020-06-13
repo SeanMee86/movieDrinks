@@ -8,6 +8,7 @@ import { FirebaseService } from '../../shared/services/firebase.service';
 import { UiService } from '../../shared/services/ui.service';
 import { Subscription } from 'rxjs';
 import { Movie } from '../../shared/models/movie.model';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-browse-movies',
@@ -22,7 +23,9 @@ export class BrowseMoviesComponent implements OnInit, OnDestroy {
   constructor(
     private sidebarService: SidebarService,
     private fbService: FirebaseService,
-    private uiService: UiService
+    private uiService: UiService,
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -38,6 +41,10 @@ export class BrowseMoviesComponent implements OnInit, OnDestroy {
         this.uiService.hideSpinner();
       }
     );
+  }
+
+  loadMovie(id: string) {
+    this.router.navigate(['/movies', id]);
   }
 
   ngOnDestroy(): void {

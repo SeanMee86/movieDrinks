@@ -45,30 +45,25 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
         this.movieFBKey = Object.keys(value)[0];
       }
     );
-
-    if (this.movieService.movies.length > 0) {
-      this.id = this.route.snapshot.params.id;
-      this.fbService.getMovies().subscribe(
-        fbMovies => {
-          const movie = fbMovies.find(fbMovie => {
-            for (const key in fbMovie) {
-              if (fbMovie[key].id === this.id) {
-                return fbMovie;
-              }
+    this.id = this.route.snapshot.params.id;
+    this.fbService.getMovies().subscribe(
+      fbMovies => {
+        const movie = fbMovies.find(fbMovie => {
+          for (const key in fbMovie) {
+            if (fbMovie[key].id === this.id) {
+              return fbMovie;
             }
-          });
-          if (!movie) {
-            this.movie = this.movieService.getMovie(this.id);
-            this.uiService.showModal(this.movie);
-          } else {
-            this.fbService.loadMovie.next(movie);
-            this.showSpinner = false;
           }
+        });
+        if (!movie) {
+          this.movie = this.movieService.getMovie(this.id);
+          this.uiService.showModal(this.movie);
+        } else {
+          this.fbService.loadMovie.next(movie);
+          this.showSpinner = false;
         }
-      );
-    } else {
-      this.router.navigate(['/movies']);
-    }
+      }
+    );
   }
 
   onAddRule() {
@@ -77,15 +72,21 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
       this.fbService.updateMovie(this.movieFBKey, {rules: updatedRules}).subscribe(
         _ => {
           this.fbService.getMovie(this.movieFBKey);
+          this.newRule = '';
         }
       );
     } else {
       this.fbService.updateMovie(this.movieFBKey, { rules: [this.newRule]}).subscribe(
         _ => {
           this.fbService.getMovie(this.movieFBKey);
+          this.newRule = '';
         }
       );
     }
+  }
+
+  removeRule(index: number) {
+    this.movie.rules.splice(index, 1);
   }
 
   ngOnDestroy(): void {

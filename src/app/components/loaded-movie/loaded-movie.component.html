@@ -11,8 +11,20 @@
     <div class="form-group">
       <button class="btn btn-outline-success" (click)="onAddRule()">Add Rule</button>
     </div>
-    <ul>
-      <li *ngFor="let rule of movie.rules">{{rule}}</li>
+    <ul class="list-group">
+      <li
+        class="list-group-item"
+        [ngClass]="{'list-group-item-dark': i%2 === 0}"
+        *ngFor="let rule of movie.rules;
+        let i=index">{{rule}}
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="removeRule(i)">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </li>
     </ul>
   </div>
 </div>

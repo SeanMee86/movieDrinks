@@ -1,5 +1,15 @@
 <div *ngIf="!showSpinner">
-  <p>browse-movies works!</p>
+  <div class="row">
+    <div class="col-12">
+      <ul class="movies-list">
+        <li
+          class="movie" *ngFor="let movie of movies"
+          (click)="loadMovie(movie.id)">
+          <app-movie [movie]="movie"></app-movie>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
 <div *ngIf="showSpinner">
   <app-spinner></app-spinner>
