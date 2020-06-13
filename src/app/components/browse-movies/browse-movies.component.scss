@@ -9,5 +9,9 @@
   .movie {
     padding: 2rem;
     align-self: start;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }

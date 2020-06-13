@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class FirebaseService {
-  rootURL = 'https://movie-drinks.firebaseio.com/';
+  rootURL = 'https://movie-drinks.firebaseio.com';
   loadMovie = new Subject<{[s: string]: Movie}>();
 
   constructor(private http: HttpClient) { }

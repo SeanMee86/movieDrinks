@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
 export class MovieService {
 
   movies: Movie[] = [];
-  private movieUrl = `http://www.omdbapi.com/?apikey=${apiKey}&type=movie&s=`;
+  private movieUrl = `https://www.omdbapi.com/?apikey=${apiKey}&type=movie&s=`;
 
   constructor(private http: HttpClient) { }
 
