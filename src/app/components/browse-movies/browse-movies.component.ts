@@ -35,9 +35,9 @@ export class BrowseMoviesComponent implements OnInit, OnDestroy {
     );
     this.fbService.getMovies().subscribe(
       response => {
-        this.movies = response.map(fbMovie => {
-          return fbMovie[Object.keys(fbMovie)[0]];
-        });
+        this.movies = response
+          .map(fbMovie => fbMovie[Object.keys(fbMovie)[0]])
+          .sort((a, b) => a.title > b.title ? 1 : -1);
         this.uiService.hideSpinner();
       }
     );

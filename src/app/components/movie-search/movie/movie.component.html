@@ -1,4 +1,4 @@
 <div class="movie-poster">
-  <h4>{{movie.title}}</h4>
+  <h4>{{movie.title.substr(0, 65) + (movie.title.length > 65 ? '...' : '')}}</h4>
   <img src="{{movie.poster !== 'N/A' ? movie.poster : 'https://critics.io/img/movies/poster-placeholder.png'}}" alt="{{movie.title}}">
 </div>

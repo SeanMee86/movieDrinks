@@ -1,8 +1,18 @@
-.mainHeader {
-  min-height: 10vh;
+.header-full-width {
+  background: #000;
 
-  h1,
-  h2 {
-    text-align: center;
+  .mainHeader {
+    min-height: 10vh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 20px;
+
+    p {
+      line-height: 1rem;
+      margin-bottom: 0;
+      margin-left: 5px;
+      font-size: .8rem;
+      color: #fff;
+    }
   }
 }
