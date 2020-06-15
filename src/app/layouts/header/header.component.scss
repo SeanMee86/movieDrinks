@@ -1,18 +1,14 @@
-.header-full-width {
-  background: #000;
+a.navbar-brand {
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 20px;
 
-  .mainHeader {
-    min-height: 10vh;
-    display: flex;
-    align-items: flex-end;
-    padding-bottom: 20px;
-
-    p {
-      line-height: 1rem;
-      margin-bottom: 0;
-      margin-left: 5px;
-      font-size: .8rem;
-      color: #fff;
-    }
+  p {
+    line-height: 1rem;
+    margin-bottom: 0;
+    margin-left: 5px;
+    font-size: .8rem;
+    color: #fff;
   }
 }
+
