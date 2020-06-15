@@ -23,6 +23,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
   spinnerSub: Subscription;
   loadedMovieSub: Subscription;
   newRule: string;
+  rulesArray: string[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -30,9 +31,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
     private movieService: MovieService,
     private uiService: UiService,
     private fbService: FirebaseService
-  ) { }
-
-  ngOnInit(): void {
+  ) {
     this.spinnerSub = this.uiService.shouldShowSpinner.subscribe(
       value => {
         this.showSpinner = value;
@@ -43,8 +42,14 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
       value => {
         this.movie = value[Object.keys(value)[0]];
         this.movieFBKey = Object.keys(value)[0];
+        if (this.movie.rules) {
+          this.rulesArray = [...this.movie.rules];
+        }
       }
     );
+  }
+
+  ngOnInit(): void {
     this.id = this.route.snapshot.params.id;
     this.fbService.getMovies().subscribe(
       fbMovies => {
@@ -67,26 +72,17 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
   }
 
   onAddRule() {
-    if (this.movie.rules) {
-      const updatedRules = [...this.movie.rules, this.newRule];
-      this.fbService.updateMovie(this.movieFBKey, {rules: updatedRules}).subscribe(
-        _ => {
-          this.fbService.getMovie(this.movieFBKey);
-          this.newRule = '';
-        }
-      );
-    } else {
-      this.fbService.updateMovie(this.movieFBKey, { rules: [this.newRule]}).subscribe(
-        _ => {
-          this.fbService.getMovie(this.movieFBKey);
-          this.newRule = '';
-        }
-      );
-    }
+    const updatedRules = [...this.rulesArray, this.newRule];
+    this.fbService.updateMovie(this.movieFBKey, {rules: updatedRules}).subscribe(
+      _ => {
+        this.rulesArray.push(this.newRule);
+        this.newRule = '';
+      }
+    );
   }
 
   removeRule(index: number) {
-    this.movie.rules.splice(index, 1);
+    this.rulesArray.splice(index, 1);
   }
 
   ngOnDestroy(): void {

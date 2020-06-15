@@ -15,7 +15,7 @@
       <li
         class="list-group-item"
         [ngClass]="{'list-group-item-dark': i%2 === 0}"
-        *ngFor="let rule of movie.rules;
+        *ngFor="let rule of rulesArray;
         let i=index">{{rule}}
         <button
           type="button"
