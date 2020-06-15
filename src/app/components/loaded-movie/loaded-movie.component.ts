@@ -31,7 +31,11 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
     private movieService: MovieService,
     private uiService: UiService,
     private fbService: FirebaseService
-  ) {
+  ) { }
+
+  ngOnInit(): void {
+    this.id = this.route.snapshot.params.id;
+
     this.spinnerSub = this.uiService.shouldShowSpinner.subscribe(
       value => {
         this.showSpinner = value;
@@ -47,10 +51,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
         }
       }
     );
-  }
 
-  ngOnInit(): void {
-    this.id = this.route.snapshot.params.id;
     this.fbService.getMovies().subscribe(
       fbMovies => {
         const movie = fbMovies.find(fbMovie => {
