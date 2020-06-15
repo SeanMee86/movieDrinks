@@ -1,14 +1,17 @@
-a.navbar-brand {
-  display: flex;
-  align-items: flex-end;
-  padding-bottom: 20px;
+nav {
+  height: 100px;
 
-  p {
-    line-height: 1rem;
-    margin-bottom: 0;
-    margin-left: 5px;
-    font-size: .8rem;
-    color: #fff;
+  a.navbar-brand {
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 20px;
+
+    p {
+      line-height: 1rem;
+      margin-bottom: 0;
+      margin-left: 5px;
+      font-size: .8rem;
+      color: #fff;
+    }
   }
 }
-

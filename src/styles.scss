@@ -2,3 +2,6 @@
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
+html {
+  scroll-padding-top: 70px;
+}
