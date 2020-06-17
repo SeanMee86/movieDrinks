@@ -13,7 +13,7 @@ export class ModalComponent implements OnInit {
   @Input()
   newMovie: Movie;
   @Output()
-  sendMovieInfo = new EventEmitter<Movie>();
+  sendKey = new EventEmitter<string>();
 
   constructor(
     private uiService: UiService,
@@ -26,18 +26,11 @@ export class ModalComponent implements OnInit {
 
   onCreateFBData() {
     this.fbService.sendData(this.newMovie).subscribe(
-      _ => {
-        this.sendMovieInfo.emit(this.newMovie);
+      fbKey => {
+        this.sendKey.emit(fbKey.name);
         this.uiService.hideSpinner();
       }
     );
-    // this.uiService.sendMovieToFB().subscribe(
-    //   response => {
-    //     this.fbService.getMovie(response.name);
-    //     this.uiService.hideModal();
-    //     this.uiService.hideSpinner();
-    //   }
-    // );
   }
 
   onCancelFBData() {

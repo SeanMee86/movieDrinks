@@ -6,10 +6,17 @@
   </div>
   <div class="col-lg-8">
     <div class="form-group">
-      <input type="text" class="form-control" [(ngModel)]="newRule">
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="newRule">
     </div>
     <div class="form-group">
-      <button class="btn btn-outline-success" (click)="onAddRule()">Add Rule</button>
+      <button
+        class="btn btn-outline-success"
+        (click)="onAddRule()"
+        [disabled]="!newRule"
+        type="button">Add Rule</button>
     </div>
     <ul class="list-group">
       <li
@@ -32,7 +39,7 @@
 <div *ngIf="showModal">
   <app-modal
     [newMovie]="movie"
-    (sendMovieInfo)="onNewMovie($event)"></app-modal>
+    (sendKey)="onNewMovie($event)"></app-modal>
 </div>
 
 <div *ngIf="showSpinner">

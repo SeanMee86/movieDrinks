@@ -73,7 +73,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
             }
           });
           if (!movie) {
-            this.movieService.getMovie(this.id);
+            this.movie = this.movieService.getMovie(this.id);
             this.showModal = true;
           } else {
             this.fbService.loadMovie.next(movie);
@@ -84,13 +84,13 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
     }
   }
 
-  onNewMovie(event: Movie) {
-    this.movie = event;
+  onNewMovie(fbKey: string) {
+    this.movieFBKey = fbKey;
     this.showModal = false;
   }
 
   onAddRule() {
-    const updatedRules = [...this.rulesArray, this.newRule];
+    const updatedRules = [...this.movie.rules, this.newRule];
     this.fbService.updateMovie(this.movieFBKey, {rules: updatedRules}).subscribe(
       _ => {
         this.rulesArray.push(this.newRule);
