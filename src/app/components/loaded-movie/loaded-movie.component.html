@@ -21,12 +21,18 @@
           type="button"
           class="close"
           aria-label="Close"
-          (click)="removeRule(i)">
+          (click)="onRemoveRule(i)">
           <span aria-hidden="true">&times;</span>
         </button>
       </li>
     </ul>
   </div>
+</div>
+
+<div *ngIf="showModal">
+  <app-modal
+    [newMovie]="movie"
+    (sendMovieInfo)="onNewMovie($event)"></app-modal>
 </div>
 
 <div *ngIf="showSpinner">

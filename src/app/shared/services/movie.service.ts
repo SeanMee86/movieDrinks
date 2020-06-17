@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Movie } from '../models/movie.model';
 import { apiKey } from '../../config/apiKey';
 import { map } from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,10 @@ export class MovieService {
   movies: Movie[] = [];
   private movieUrl = `https://www.omdbapi.com/?apikey=${apiKey}&type=movie&s=`;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) { }
 
   findMovie(term: string): Observable<Movie[]> {
     return this.http.get<any>(this.movieUrl + term)
@@ -37,9 +41,10 @@ export class MovieService {
   }
 
   getMovie(id: string) {
-    const movieToLoad = this.movies.filter(movie => movie.id === id);
-    if (movieToLoad.length === 1) {
-      return movieToLoad[0];
+    if (this.movies.length < 1) {
+      this.router.navigate(['/movies']);
+      return;
     }
+    return this.movies.find(movie => movie.id === id);
   }
 }
