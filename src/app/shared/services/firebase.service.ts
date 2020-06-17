@@ -59,6 +59,6 @@ export class FirebaseService {
   }
 
   updateMovie(fbKey: string, data: {rules: string[]}) {
-    return this.http.patch(`${this.rootURL}/movies/${fbKey}.json`, data);
+    return this.http.patch<{rules: string[]}>(`${this.rootURL}/movies/${fbKey}.json`, data);
   }
 }
