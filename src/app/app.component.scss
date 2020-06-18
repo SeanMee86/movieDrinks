@@ -1,6 +1,10 @@
 .mainBottom {
   min-height: 100vh;
   padding: 100px 0 0 0;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
 
   .mainContent {
     min-height: 90vh;
