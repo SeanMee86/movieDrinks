@@ -90,7 +90,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
   }
 
   onAddRule() {
-    const updatedRules = [...this.movie.rules, this.newRule];
+    const updatedRules = this.movie.rules ? [...this.movie.rules, this.newRule] : [this.newRule];
     this.fbService.updateMovie(this.movieFBKey, {rules: updatedRules}).subscribe(
       data => {
         this.movie.rules = data.rules;
