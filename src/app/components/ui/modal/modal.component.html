@@ -1,15 +1,34 @@
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Create New Game?</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+    <h4
+      class="modal-title"
+      id="modal-basic-title">Create New Game?</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    A game has not been created for this movie yet, would you like to start one?
+    <p>A game has not been created for this movie yet, if you would like to create one please select a category from the dropdown?</p>
+    <div class="form-group">
+      <select
+        [(ngModel)]="categoryValue"
+        class="form-control">
+        <option
+          *ngFor="let category of categories"
+          value="{{category.toLowerCase()}}">{{category}}</option>
+      </select>
+    </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" (click)="onCreateFBData(); modal.dismiss('MOVIE_CONFIRMED')">Yes</button>
-    <button class="btn btn-danger" (click)="modal.dismiss()">No</button>
+    <button
+      class="btn btn-primary"
+      (click)="onCreateFBData(); modal.dismiss('MOVIE_CONFIRMED')">Submit Movie</button>
+    <button
+      class="btn btn-danger"
+      (click)="modal.dismiss()">Cancel</button>
   </div>
 </ng-template>

@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
-import {Subject} from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SidebarService {
-
   main = new Subject<boolean>();
   browse = new Subject<boolean>();
-  constructor() { }
 
   showBrowse() {
     this.main.next(false);

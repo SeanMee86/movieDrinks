@@ -3,12 +3,18 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
+
+import {
+  ActivatedRoute,
+  Params,
+  Router
+} from '@angular/router';
+
+import { Subscription } from 'rxjs';
 import { Movie } from '../../shared/models/movie.model';
-import {ActivatedRoute, Params, Router} from '@angular/router';
 import { MovieService } from '../../shared/services/movie.service';
 import { UiService } from '../../shared/services/ui.service';
 import { FirebaseService } from '../../shared/services/firebase.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-loaded-movie',

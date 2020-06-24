@@ -6,11 +6,12 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import { UiService } from '../../../shared/services/ui.service';
+
 import { Router } from '@angular/router';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { UiService } from '../../../shared/services/ui.service';
 import { FirebaseService } from '../../../shared/services/firebase.service';
 import { Movie } from '../../../shared/models/movie.model';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-modal',
@@ -20,10 +21,27 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class ModalComponent implements AfterViewInit {
   @Input()
   newMovie: Movie;
+
   @Output()
   sendKey = new EventEmitter<string>();
+
   @ViewChild('content')
   content: NgbActiveModal;
+
+  categoryValue = 'action';
+  categories: string[] = [
+    'Action',
+    'Adventure',
+    'Comedy',
+    'Crime',
+    'Drama',
+    'Historical',
+    'Horror',
+    'Musical',
+    'Sci-Fi',
+    'War',
+    'Western'
+  ];
 
   constructor(
     private uiService: UiService,
@@ -45,7 +63,8 @@ export class ModalComponent implements AfterViewInit {
   }
 
   onCreateFBData() {
-    this.fbService.sendData(this.newMovie).subscribe(
+    console.log(this.newMovie);
+    this.fbService.sendData({...this.newMovie, category: this.categoryValue}).subscribe(
       fbKey => {
         this.sendKey.emit(fbKey.name);
         this.uiService.hideSpinner();

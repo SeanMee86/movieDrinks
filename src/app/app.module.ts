@@ -1,13 +1,12 @@
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
-
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';
 import { MovieSearchComponent } from './components/movie-search/movie-search.component';
 import { MovieComponent } from './components/movie-search/movie/movie.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HeaderComponent } from './layouts/header/header.component';
 import { SidebarComponent } from './layouts/sidebar/sidebar.component';
 import { MainSidebarComponent } from './layouts/sidebar/main-sidebar/main-sidebar.component';
