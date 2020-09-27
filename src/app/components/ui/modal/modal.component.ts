@@ -63,7 +63,6 @@ export class ModalComponent implements AfterViewInit {
   }
 
   onCreateFBData() {
-    console.log(this.newMovie);
     this.fbService.sendData({...this.newMovie, category: this.categoryValue}).subscribe(
       fbKey => {
         this.sendKey.emit(fbKey.name);

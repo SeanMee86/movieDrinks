@@ -1,6 +1,7 @@
 <div class="row" *ngIf="movie && !showSpinner">
   <div class="col-lg-4">
     <h3>{{movie.title}}</h3>
+    <p><strong>{{movie.category | uppercase}}</strong></p>
     <p>{{movie.year}}</p>
     <img class="loaded-movie" src="{{movie.poster}}" alt="{{movie.title}}">
   </div>

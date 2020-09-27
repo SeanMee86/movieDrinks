@@ -28,6 +28,10 @@ export class FirebaseService {
       );
   }
 
+  getCategories() {
+    return this.http.get(this.rootURL + '/movies.json')
+  }
+
   getMovies() {
     return this.http.get<{[s: string]: Movie}>(this.rootURL + '/movies.json').pipe(
       map(
