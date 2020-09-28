@@ -6,7 +6,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MovieSearchComponent } from './components/movie-search/movie-search.component';
-import { MovieComponent } from './components/movie-search/movie/movie.component';
+import { MovieComponent } from './components/movie/movie.component';
 import { HeaderComponent } from './layouts/header/header.component';
 import { SidebarComponent } from './layouts/sidebar/sidebar.component';
 import { MainSidebarComponent } from './layouts/sidebar/main-sidebar/main-sidebar.component';
@@ -17,6 +17,8 @@ import { BrowseMoviesComponent } from './components/browse-movies/browse-movies.
 import { LoadedMovieComponent } from './components/loaded-movie/loaded-movie.component';
 import { ModalComponent } from './components/ui/modal/modal.component';
 import { SpinnerComponent } from './components/ui/spinner/spinner.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,9 @@ import { SpinnerComponent } from './components/ui/spinner/spinner.component';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    NgbModule
+    NgbModule,
+    BrowserAnimationsModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,11 @@
+.categoryList {
+  list-style-type: none;
+  margin-top: 20px;
+
+  li {
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}

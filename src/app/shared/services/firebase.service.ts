@@ -11,6 +11,8 @@ import { Movie } from '../models/movie.model';
 export class FirebaseService {
   rootURL = 'https://movie-drinks.firebaseio.com';
   loadMovie = new Subject<{[s: string]: Movie}>();
+  moviesLoaded = new Subject<{[s: string]: Movie}[]>();
+  filteredMovies = new Subject<{[s: string]: Movie}[]>();
   fbMovies: {[s: string]: Movie}[] = [];
 
   constructor(private http: HttpClient) { }
@@ -26,10 +28,6 @@ export class FirebaseService {
           }
         )
       );
-  }
-
-  getCategories() {
-    return this.http.get(this.rootURL + '/movies.json')
   }
 
   getMovies() {
@@ -48,6 +46,7 @@ export class FirebaseService {
       tap(
         fbMoviesArray => {
           this.fbMovies = fbMoviesArray;
+          this.moviesLoaded.next(this.fbMovies);
         }
       )
     );
@@ -65,5 +64,18 @@ export class FirebaseService {
 
   updateMovie(fbKey: string, data: {rules: string[]}) {
     return this.http.patch<{rules: string[]}>(`${this.rootURL}/movies/${fbKey}.json`, data);
+  }
+
+  filterMovies(filter: string){
+    const filteredMovies = this.fbMovies.filter(movie => movie[Object.keys(movie)[0]].category === filter)
+    this.filteredMovies.next(filteredMovies);
+  }
+
+  clearFilter(){
+    this.filteredMovies
+      .next(
+        this.fbMovies
+          .sort((a, b) => a[Object.keys(a)[0]].title > b[Object.keys(b)[0]].title ? 1 : -1)
+      );
   }
 }

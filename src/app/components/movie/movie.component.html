@@ -1,0 +1,12 @@
+<mat-card>
+  <div class="movie-poster">
+    <mat-card-title>{{movie.title.substr(0, 65) + (movie.title.length > 65 ? '...' : '')}}</mat-card-title>
+    <img
+      src="{{
+        movie.poster !== 'N/A' ?
+        movie.poster :
+        'https://critics.io/img/movies/poster-placeholder.png'
+      }}"
+      alt="{{movie.title}}">
+  </div>
+</mat-card>

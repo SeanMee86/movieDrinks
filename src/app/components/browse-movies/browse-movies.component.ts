@@ -27,7 +27,7 @@ export class BrowseMoviesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sidebarService.showBrowse();
     if (this.fbService.fbMovies.length) {
-      this.movies = this.findAndSort(this.fbService.fbMovies.slice());
+      this.movies = this.findAndSort(this.fbService.fbMovies);
       this.showSpinner = false;
     } else {
       this.fbService.getMovies().subscribe(
@@ -37,11 +37,14 @@ export class BrowseMoviesComponent implements OnInit, OnDestroy {
         }
       );
     }
+    this.fbService.filteredMovies.subscribe(filteredMovies => {
+      this.movies = filteredMovies.map(movie => movie[Object.keys(movie)[0]])
+    })
   }
 
   findAndSort(movieData: {[s: string]: Movie}[]) {
     return movieData
-      .map<Movie>(fbMovie => fbMovie[Object.keys(fbMovie)[0]])
+      .map(fbMovie => fbMovie[Object.keys(fbMovie)[0]])
       .sort((a, b) => a.title > b.title ? 1 : -1);
   }
 

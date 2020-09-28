@@ -7,12 +7,5 @@ import {FirebaseService} from "../../../shared/services/firebase.service";
   styleUrls: ['./main-sidebar.component.scss']
 })
 export class MainSidebarComponent {
-  constructor(private fbService: FirebaseService) {
-  }
 
-  getCategories(){
-    this.fbService.getCategories().subscribe(res => {
-      console.log(res);
-    })
-  }
 }

@@ -2,6 +2,7 @@ nav {
   a.navbar-brand {
     display: flex;
     align-items: flex-end;
+    flex-flow: column;
     padding-bottom: 20px;
 
     p {
@@ -10,6 +11,10 @@ nav {
       margin-left: 5px;
       font-size: .8rem;
       color: #fff;
+    }
+
+    img {
+      width: 200px;
     }
   }
 }
