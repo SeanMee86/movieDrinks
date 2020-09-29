@@ -1,0 +1,16 @@
+ul.top5 {
+  list-style-type: none;
+  padding: 0;
+
+  li {
+    margin: 20px 0;
+
+    img {
+      max-width: 100%;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

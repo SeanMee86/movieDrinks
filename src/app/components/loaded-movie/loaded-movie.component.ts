@@ -58,12 +58,14 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
         if (this.movie.rules) {
           this.rulesArray = [...this.movie.rules];
         }
-        const viewCount = this.movie.viewCount+1
-        this.fbService
-          .movieViewed(this.movieFBKey, {viewCount})
-          .subscribe(value => {
-            this.movie.viewCount = value.viewCount
-          })
+        if(this.rulesArray.length) {
+          const viewCount = this.movie.viewCount + 1
+          this.fbService
+            .movieViewed(this.movieFBKey, {viewCount})
+            .subscribe(value => {
+              this.movie.viewCount = value.viewCount
+            })
+        }
       }
     );
     this.onFindMovie();

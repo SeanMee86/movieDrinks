@@ -1,1 +1,9 @@
-<p>main-sidebar works!</p>
+<h1>Top 5 Games</h1>
+<ul class="top5">
+  <li *ngFor="let movie of top5" (click)="loadMovie(movie.id)">
+    <mat-card>
+      <mat-card-title>{{movie.title}}</mat-card-title>
+      <img src="{{movie.poster}}" alt="">
+    </mat-card>
+  </li>
+</ul>

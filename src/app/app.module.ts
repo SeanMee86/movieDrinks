@@ -19,6 +19,7 @@ import { ModalComponent } from './components/ui/modal/modal.component';
 import { SpinnerComponent } from './components/ui/spinner/spinner.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
+import {MatListModule} from "@angular/material/list";
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { MatCardModule } from '@angular/material/card';
     FormsModule,
     NgbModule,
     BrowserAnimationsModule,
-    MatCardModule
+    MatCardModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
