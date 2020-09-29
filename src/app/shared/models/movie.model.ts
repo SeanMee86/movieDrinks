@@ -5,4 +5,5 @@ export interface Movie {
   id: string;
   category?: string;
   rules?: string[];
+  viewCount?: number;
 }

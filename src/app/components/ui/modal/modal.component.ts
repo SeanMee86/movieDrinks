@@ -63,7 +63,7 @@ export class ModalComponent implements AfterViewInit {
   }
 
   onCreateFBData() {
-    this.fbService.sendData({...this.newMovie, category: this.categoryValue}).subscribe(
+    this.fbService.sendData({...this.newMovie, category: this.categoryValue, viewCount: 0}).subscribe(
       fbKey => {
         this.sendKey.emit(fbKey.name);
         this.uiService.hideSpinner();
