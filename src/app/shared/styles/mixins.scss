@@ -1,0 +1,3 @@
+@mixin columns($total){
+  grid-template-columns: repeat($total, 1fr);
+}
