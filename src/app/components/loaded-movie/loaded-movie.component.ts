@@ -1,24 +1,16 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import {
-  ActivatedRoute,
-  Params,
-  Router
-} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 
-import { Subscription } from 'rxjs';
-import { Movie } from '../../shared/models/movie.model';
-import { MovieService } from '../../shared/services/movie.service';
-import { UiService } from '../../shared/services/ui.service';
-import { FirebaseService } from '../../shared/services/firebase.service';
-import { faFlag, faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
-import { Email } from '../../../assets/smtp';
-import { Rule } from '../../shared/models/rule.model'
-import { password } from "../../config/elasticEmailPassword";
+import {Subscription} from 'rxjs';
+import {Movie} from '../../shared/models/movie.model';
+import {MovieService} from '../../shared/services/movie.service';
+import {UiService} from '../../shared/services/ui.service';
+import {FirebaseService} from '../../shared/services/firebase.service';
+import {faFlag, faThumbsDown, faThumbsUp} from "@fortawesome/free-solid-svg-icons";
+import {Email} from '../../../assets/smtp';
+import {Rule} from '../../shared/models/rule.model'
+import {password} from "../../config/elasticEmailPassword";
 
 @Component({
   selector: 'app-loaded-movie',
@@ -140,5 +132,11 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
       Subject: 'Flagged Rule',
       Body: `${movieTitle} has flagged rule: ${rule}`
     }).then(res => console.log(res));
+  }
+
+  onVote(vote: number, rule: Rule, index: number){
+    this.movie.rules[index].rating = rule.rating + vote;
+    this.fbService.movieVoted(this.movieFBKey, {rules: this.movie.rules})
+      .subscribe(_ => {})
   }
 }

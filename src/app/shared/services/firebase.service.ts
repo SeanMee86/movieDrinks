@@ -71,6 +71,10 @@ export class FirebaseService {
     return this.http.patch<{viewCount: number}>(`${this.rootURL}/movies/${fbKey}.json`, data);
   }
 
+  movieVoted(fbKey: string, data) {
+    return this.http.patch<{rules: Rule[]}>(`${this.rootURL}/movies/${fbKey}.json`, data);
+  }
+
   filterMovies(filter: string){
     const filteredMovies = this.fbMovies.filter(movie => movie[Object.keys(movie)[0]].category === filter)
     this.filteredMovies.next(filteredMovies);

@@ -8,5 +8,4 @@ export interface Movie {
   category?: string;
   rules?: Rule[];
   viewCount?: number;
-  rating?: number;
 }

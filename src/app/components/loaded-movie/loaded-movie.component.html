@@ -26,8 +26,8 @@
         *ngFor="let rule of rulesArray;
         let i=index">{{rule.rule}}
         <div style="display: flex;align-items: center;">
-        <fa-icon (click)="onFlagRule(movie.title, rule.rule)" [icon]="faThumbsUp"></fa-icon>
-        <fa-icon (click)="onFlagRule(movie.title, rule.rule)" [icon]="faThumbsDown"></fa-icon>
+        <fa-icon (click)="onVote(1, rule, i)" [icon]="faThumbsUp"></fa-icon>
+        <fa-icon (click)="onVote(-1, rule, i)" [icon]="faThumbsDown"></fa-icon>
         <fa-icon class="flag" (click)="onFlagRule(movie.title, rule.rule)" [icon]="faFlag"></fa-icon>
         <button
           type="button"
