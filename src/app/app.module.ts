@@ -19,7 +19,8 @@ import { ModalComponent } from './components/ui/modal/modal.component';
 import { SpinnerComponent } from './components/ui/spinner/spinner.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
-import {MatListModule} from "@angular/material/list";
+import { MatListModule } from "@angular/material/list";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import {MatListModule} from "@angular/material/list";
     SpinnerComponent
   ],
   imports: [
+    FontAwesomeModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,

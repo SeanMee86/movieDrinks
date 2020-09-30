@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { Movie } from '../models/movie.model';
+import {Rule} from "../models/rule.model";
 
 
 @Injectable({
@@ -62,8 +63,8 @@ export class FirebaseService {
     });
   }
 
-  updateMovie(fbKey: string, data: {rules: string[]}) {
-    return this.http.patch<{rules: string[]}>(`${this.rootURL}/movies/${fbKey}.json`, data);
+  updateMovie(fbKey: string, data: {rules: Rule[]}) {
+    return this.http.patch<{rules: Rule[]}>(`${this.rootURL}/movies/${fbKey}.json`, data);
   }
 
   movieViewed(fbKey: string, data: {viewCount: number}) {

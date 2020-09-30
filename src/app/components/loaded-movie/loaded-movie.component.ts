@@ -15,6 +15,10 @@ import { Movie } from '../../shared/models/movie.model';
 import { MovieService } from '../../shared/services/movie.service';
 import { UiService } from '../../shared/services/ui.service';
 import { FirebaseService } from '../../shared/services/firebase.service';
+import { faFlag, faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
+import { Email } from '../../../assets/smtp';
+import { Rule } from '../../shared/models/rule.model'
+import { password } from "../../config/elasticEmailPassword";
 
 @Component({
   selector: 'app-loaded-movie',
@@ -22,14 +26,17 @@ import { FirebaseService } from '../../shared/services/firebase.service';
   styleUrls: ['./loaded-movie.component.scss']
 })
 export class LoadedMovieComponent implements OnInit, OnDestroy {
+  faFlag = faFlag;
+  faThumbsUp = faThumbsUp;
+  faThumbsDown = faThumbsDown;
   movie: Movie;
   movieFBKey: string;
   id: string;
   showSpinner = true;
   spinnerSub: Subscription;
   loadedMovieSub: Subscription;
-  newRule: string;
-  rulesArray: string[] = [];
+  newRule: Rule = {rule: '', rating: 0};
+  rulesArray: Rule[] = [];
   showModal = false;
 
   constructor(
@@ -109,7 +116,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
       data => {
         this.movie.rules = data.rules;
         this.rulesArray.push(this.newRule);
-        this.newRule = '';
+        this.newRule = {rule: '', rating: 0};
       }
     );
   }
@@ -121,5 +128,17 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.spinnerSub.unsubscribe();
     this.loadedMovieSub.unsubscribe();
+  }
+
+  onFlagRule(movieTitle: string, rule: string) {
+    Email.send({
+      Host: 'smtp.elasticemail.com',
+      Username: 'seanmeedev@gmail.com',
+      Password: password,
+      To: 'seanmeedev@gmail.com',
+      From: 'seanmeedev@gmail.com',
+      Subject: 'Flagged Rule',
+      Body: `${movieTitle} has flagged rule: ${rule}`
+    }).then(res => console.log(res));
   }
 }

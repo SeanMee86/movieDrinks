@@ -1,6 +1,6 @@
 <div class="row" *ngIf="movie && !showSpinner">
   <div class="col-lg-4">
-    <h3>{{movie.title}}</h3>
+    <h1>{{movie.title}}</h1>
     <p><strong>{{movie.category | uppercase}}</strong></p>
     <p>{{movie.year}}</p>
     <img class="loaded-movie" src="{{movie.poster}}" alt="{{movie.title}}">
@@ -10,7 +10,7 @@
       <input
         type="text"
         class="form-control"
-        [(ngModel)]="newRule">
+        [(ngModel)]="newRule.rule">
     </div>
     <div class="form-group">
       <button
@@ -21,10 +21,14 @@
     </div>
     <ul class="list-group">
       <li
-        class="list-group-item"
+        class="list-group-item rule"
         [ngClass]="{'list-group-item-dark': i%2 === 0}"
         *ngFor="let rule of rulesArray;
-        let i=index">{{rule}}
+        let i=index">{{rule.rule}}
+        <div style="display: flex;align-items: center;">
+        <fa-icon (click)="onFlagRule(movie.title, rule.rule)" [icon]="faThumbsUp"></fa-icon>
+        <fa-icon (click)="onFlagRule(movie.title, rule.rule)" [icon]="faThumbsDown"></fa-icon>
+        <fa-icon class="flag" (click)="onFlagRule(movie.title, rule.rule)" [icon]="faFlag"></fa-icon>
         <button
           type="button"
           class="close"
@@ -32,6 +36,7 @@
           (click)="onRemoveRule(i)">
           <span aria-hidden="true">&times;</span>
         </button>
+        </div>
       </li>
     </ul>
   </div>
