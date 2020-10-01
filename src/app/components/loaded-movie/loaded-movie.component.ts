@@ -27,7 +27,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
   showSpinner = true;
   spinnerSub: Subscription;
   loadedMovieSub: Subscription;
-  newRule: Rule = {rule: '', rating: 0};
+  newRule: Rule = {rule: '', rating: 0, isFlagged: false, hasVoted: false};
   rulesArray: Rule[] = [];
   showModal = false;
 
@@ -54,7 +54,10 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
       value => {
         this.movie = value[Object.keys(value)[0]];
         this.movieFBKey = Object.keys(value)[0];
-        if (this.movie.rules) {
+        if (localStorage.getItem(this.movieFBKey)) {
+          this.rulesArray = JSON.parse(localStorage.getItem(this.movieFBKey))
+        }
+        else if (this.movie.rules) {
           this.rulesArray = [...this.movie.rules];
         }
         if(this.rulesArray.length) {
@@ -108,7 +111,10 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
       data => {
         this.movie.rules = data.rules;
         this.rulesArray.push(this.newRule);
-        this.newRule = {rule: '', rating: 0};
+        if(localStorage.getItem(this.movieFBKey)) {
+          localStorage.setItem(this.movieFBKey, JSON.stringify(this.rulesArray))
+        }
+        this.newRule = {rule: '', rating: 0, isFlagged: false, hasVoted: false};
       }
     );
   }
@@ -122,21 +128,45 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
     this.loadedMovieSub.unsubscribe();
   }
 
-  onFlagRule(movieTitle: string, rule: string) {
-    Email.send({
-      Host: 'smtp.elasticemail.com',
-      Username: 'seanmeedev@gmail.com',
-      Password: password,
-      To: 'seanmeedev@gmail.com',
-      From: 'seanmeedev@gmail.com',
-      Subject: 'Flagged Rule',
-      Body: `${movieTitle} has flagged rule: ${rule}`
-    }).then(res => console.log(res));
+  onFlagRule(movieTitle: string, rule: string, id: string, index: number) {
+    if(!this.rulesArray[index].isFlagged){
+      this.rulesArray[index].isFlagged = true;
+      localStorage.setItem(id, JSON.stringify(this.rulesArray))
+      Email.send({
+        Host: 'smtp.elasticemail.com',
+        Username: 'seanmeedev@gmail.com',
+        Password: password,
+        To: 'seanmeedev@gmail.com',
+        From: 'seanmeedev@gmail.com',
+        Subject: 'Flagged Rule',
+        Body: `${movieTitle} has flagged rule: ${rule}`
+      }).then(res => console.log(res));
+    }else{
+      alert("You have already flagged this rule.")
+    }
   }
 
   onVote(vote: number, rule: Rule, index: number){
-    this.movie.rules[index].rating = rule.rating + vote;
-    this.fbService.movieVoted(this.movieFBKey, {rules: this.movie.rules})
-      .subscribe(_ => {})
+    if(this.rulesArray[index].hasVoted){
+      if(this.rulesArray[index].vote === vote) {
+        this.rulesArray[index].rating = rule.rating - vote
+        this.rulesArray[index].vote = null;
+        this.rulesArray[index].hasVoted = false;
+        localStorage.setItem(this.movieFBKey, JSON.stringify(this.rulesArray));
+      } else {
+        this.rulesArray[index].rating = rule.rating + (vote * 2);
+        this.rulesArray[index].vote = vote;
+        localStorage.setItem(this.movieFBKey, JSON.stringify(this.rulesArray));
+      }
+    } else {
+      this.rulesArray[index].rating = rule.rating + vote;
+      this.rulesArray[index].hasVoted = true;
+      this.rulesArray[index].vote = vote;
+      localStorage.setItem(this.movieFBKey, JSON.stringify(this.rulesArray));
+    }
+    this.fbService.movieVoted(this.movieFBKey, {rules: this.rulesArray})
+      .subscribe(res => {
+        console.log(this.rulesArray);
+      })
   }
 }
