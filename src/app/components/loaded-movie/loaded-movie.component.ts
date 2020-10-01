@@ -1,16 +1,29 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
 
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {
+  ActivatedRoute,
+  Params,
+  Router
+} from '@angular/router';
 
-import {Subscription} from 'rxjs';
-import {Movie} from '../../shared/models/movie.model';
-import {MovieService} from '../../shared/services/movie.service';
-import {UiService} from '../../shared/services/ui.service';
-import {FirebaseService} from '../../shared/services/firebase.service';
-import {faFlag, faThumbsDown, faThumbsUp} from "@fortawesome/free-solid-svg-icons";
-import {Email} from '../../../assets/smtp';
-import {Rule} from '../../shared/models/rule.model'
-import {password} from "../../config/elasticEmailPassword";
+import { Subscription } from 'rxjs';
+import { Movie } from '../../shared/models/movie.model';
+import { MovieService } from '../../shared/services/movie.service';
+import { UiService } from '../../shared/services/ui.service';
+import { FirebaseService } from '../../shared/services/firebase.service';
+import {
+  faFlag,
+  faThumbsDown,
+  faThumbsUp
+} from "@fortawesome/free-solid-svg-icons";
+import { Email } from '../../../assets/smtp';
+import { Rule } from '../../shared/models/rule.model'
+import { password } from "../../config/elasticEmailPassword";
+import {RuleCookie} from "../../shared/models/rule-cookie.model";
 
 @Component({
   selector: 'app-loaded-movie',
@@ -27,9 +40,10 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
   showSpinner = true;
   spinnerSub: Subscription;
   loadedMovieSub: Subscription;
-  newRule: Rule = {rule: '', rating: 0, isFlagged: false, hasVoted: false};
+  newRule: Rule = {rule: '', rating: 0};
   rulesArray: Rule[] = [];
   showModal = false;
+  userInfo: RuleCookie[];
 
   constructor(
     private route: ActivatedRoute,
@@ -54,10 +68,8 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
       value => {
         this.movie = value[Object.keys(value)[0]];
         this.movieFBKey = Object.keys(value)[0];
-        if (localStorage.getItem(this.movieFBKey)) {
-          this.rulesArray = JSON.parse(localStorage.getItem(this.movieFBKey))
-        }
-        else if (this.movie.rules) {
+        this.userInfo = this.getCookie(this.movieFBKey);
+        if (this.movie.rules) {
           this.rulesArray = [...this.movie.rules];
         }
         if(this.rulesArray.length) {
@@ -107,14 +119,15 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
 
   onAddRule() {
     const updatedRules = this.movie.rules ? [...this.movie.rules, this.newRule] : [this.newRule];
+    if(this.userInfo) {
+      this.userInfo.push({hasFlagged: false, hasVoted: false, vote: null});
+      this.setCookie(this.movieFBKey, this.userInfo);
+    }
     this.fbService.updateMovie(this.movieFBKey, {rules: updatedRules}).subscribe(
       data => {
         this.movie.rules = data.rules;
         this.rulesArray.push(this.newRule);
-        if(localStorage.getItem(this.movieFBKey)) {
-          localStorage.setItem(this.movieFBKey, JSON.stringify(this.rulesArray))
-        }
-        this.newRule = {rule: '', rating: 0, isFlagged: false, hasVoted: false};
+        this.newRule = {rule: '', rating: 0};
       }
     );
   }
@@ -128,45 +141,73 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
     this.loadedMovieSub.unsubscribe();
   }
 
-  onFlagRule(movieTitle: string, rule: string, id: string, index: number) {
-    if(!this.rulesArray[index].isFlagged){
-      this.rulesArray[index].isFlagged = true;
-      localStorage.setItem(id, JSON.stringify(this.rulesArray))
-      Email.send({
-        Host: 'smtp.elasticemail.com',
-        Username: 'seanmeedev@gmail.com',
-        Password: password,
-        To: 'seanmeedev@gmail.com',
-        From: 'seanmeedev@gmail.com',
-        Subject: 'Flagged Rule',
-        Body: `${movieTitle} has flagged rule: ${rule}`
-      }).then(res => console.log(res));
-    }else{
-      alert("You have already flagged this rule.")
+  onFlagRule(movieTitle: string, rule: string, index: number) {
+    if(!this.userInfo) {
+      this.userInfo = this.buildCookie();
     }
+    if(this.userInfo[index].hasFlagged === true) {
+      alert("You have already flagged this rule.")
+      return;
+    }
+    this.userInfo[index].hasFlagged = true;
+    this.setCookie(this.movieFBKey, this.userInfo);
+    Email.send({
+      Host: 'smtp.elasticemail.com',
+      Username: 'seanmeedev@gmail.com',
+      Password: password,
+      To: 'seanmeedev@gmail.com',
+      From: 'seanmeedev@gmail.com',
+      Subject: 'Flagged Rule',
+      Body: `${movieTitle} has flagged rule: ${rule}`
+    }).then(res => console.log(res));
   }
 
   onVote(vote: number, rule: Rule, index: number){
-    if(this.rulesArray[index].hasVoted){
-      if(this.rulesArray[index].vote === vote) {
-        this.rulesArray[index].rating = rule.rating - vote
-        this.rulesArray[index].vote = null;
-        this.rulesArray[index].hasVoted = false;
-        localStorage.setItem(this.movieFBKey, JSON.stringify(this.rulesArray));
-      } else {
-        this.rulesArray[index].rating = rule.rating + (vote * 2);
-        this.rulesArray[index].vote = vote;
-        localStorage.setItem(this.movieFBKey, JSON.stringify(this.rulesArray));
-      }
-    } else {
+    if(!this.userInfo){
+      this.userInfo = this.buildCookie()
+      this.userInfo[index].hasVoted = true;
+      this.userInfo[index].vote = vote;
+      this.setCookie(this.movieFBKey, this.userInfo)
       this.rulesArray[index].rating = rule.rating + vote;
-      this.rulesArray[index].hasVoted = true;
-      this.rulesArray[index].vote = vote;
-      localStorage.setItem(this.movieFBKey, JSON.stringify(this.rulesArray));
+    }else{
+      if(this.userInfo[index].hasVoted) {
+        if(this.userInfo[index].vote === vote) {
+          this.rulesArray[index].rating = rule.rating - vote;
+          this.userInfo[index].vote = null;
+          this.userInfo[index].hasVoted = false;
+          this.setCookie(this.movieFBKey, this.userInfo)
+        }else{
+          this.rulesArray[index].rating = rule.rating + (vote*2);
+          this.userInfo[index].vote = vote;
+          this.setCookie(this.movieFBKey, this.userInfo)
+        }
+      }else{
+        this.rulesArray[index].rating = rule.rating + vote;
+        this.userInfo[index].hasVoted = true;
+        this.userInfo[index].vote = vote;
+        this.setCookie(this.movieFBKey, this.userInfo)
+      }
     }
     this.fbService.movieVoted(this.movieFBKey, {rules: this.rulesArray})
       .subscribe(res => {
-        console.log(this.rulesArray);
       })
+  }
+
+  buildCookie(): RuleCookie[] {
+    return this.rulesArray.map(() => {
+      return {
+        hasFlagged: false,
+        hasVoted: false,
+        vote: null
+      }
+    });
+  }
+
+  getCookie(id: string): RuleCookie[]{
+    return JSON.parse(localStorage.getItem(id));
+  }
+
+  setCookie(id: string, cookie: RuleCookie[]){
+    localStorage.setItem(id, JSON.stringify(cookie));
   }
 }
