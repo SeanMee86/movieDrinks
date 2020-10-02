@@ -3,7 +3,7 @@ ul.top5 {
   padding: 0;
 
   li {
-    margin: 20px 0;
+    margin: 20px;
 
     img {
       max-width: 100%;
@@ -11,6 +11,16 @@ ul.top5 {
 
     &:hover {
       cursor: pointer;
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    display: flex;
+    overflow: scroll;
+
+    mat-card {
+      height: 100%;
+      width: 200px;
     }
   }
 }

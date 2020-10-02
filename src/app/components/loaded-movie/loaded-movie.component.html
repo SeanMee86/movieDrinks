@@ -28,16 +28,16 @@
         <div style="display: flex;align-items: center;">
         <fa-icon
           (click)="onVote(1, rule, i)"
-          [ngStyle]="{'color': userInfo && userInfo[i].vote === 1 ? 'green' : 'inherit'}"
+          [ngStyle]="{'color': userInfo && userInfo.rules[i].vote === 1 ? 'green' : 'inherit'}"
           [icon]="faThumbsUp"></fa-icon>
         <fa-icon
           (click)="onVote(-1, rule, i)"
-          [ngStyle]="{'color': userInfo && userInfo[i].vote === -1 ? 'red' : 'inherit'}"
+          [ngStyle]="{'color': userInfo && userInfo.rules[i].vote === -1 ? 'red' : 'inherit'}"
           [icon]="faThumbsDown"></fa-icon>
         <fa-icon
           class="flag"
           (click)="onFlagRule(movie.title, rule.rule, i)"
-          [ngStyle]="{'color': userInfo && userInfo[i].hasFlagged ? 'yellow' : 'inherit'}"
+          [ngStyle]="{'color': userInfo && userInfo.rules[i].hasFlagged ? 'yellow' : 'inherit'}"
           [icon]="faFlag"></fa-icon>
         <button
           type="button"
@@ -49,6 +49,11 @@
         </div>
       </li>
     </ul>
+    <button
+      type="button"
+      class="btn btn-outline-success"
+      style="margin-top: 15px"
+      (click)="onWatchMovie()">Game Played</button>
   </div>
 </div>
 

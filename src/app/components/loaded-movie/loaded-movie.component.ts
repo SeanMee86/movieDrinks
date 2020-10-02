@@ -23,7 +23,7 @@ import {
 import { Email } from '../../../assets/smtp';
 import { Rule } from '../../shared/models/rule.model'
 import { password } from "../../config/elasticEmailPassword";
-import {RuleCookie} from "../../shared/models/rule-cookie.model";
+import {Cookie} from "../../shared/models/cookie.model";
 
 @Component({
   selector: 'app-loaded-movie',
@@ -43,7 +43,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
   newRule: Rule = {rule: '', rating: 0};
   rulesArray: Rule[] = [];
   showModal = false;
-  userInfo: RuleCookie[];
+  userInfo: Cookie;
 
   constructor(
     private route: ActivatedRoute,
@@ -71,14 +71,6 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
         this.userInfo = this.getCookie(this.movieFBKey);
         if (this.movie.rules) {
           this.rulesArray = [...this.movie.rules];
-        }
-        if(this.rulesArray.length) {
-          const viewCount = this.movie.viewCount + 1
-          this.fbService
-            .movieViewed(this.movieFBKey, {viewCount})
-            .subscribe(value => {
-              this.movie.viewCount = value.viewCount
-            })
         }
       }
     );
@@ -120,7 +112,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
   onAddRule() {
     const updatedRules = this.movie.rules ? [...this.movie.rules, this.newRule] : [this.newRule];
     if(this.userInfo) {
-      this.userInfo.push({hasFlagged: false, hasVoted: false, vote: null});
+      this.userInfo.rules.push({hasFlagged: false, hasVoted: false, vote: null});
       this.setCookie(this.movieFBKey, this.userInfo);
     }
     this.fbService.updateMovie(this.movieFBKey, {rules: updatedRules}).subscribe(
@@ -145,11 +137,11 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
     if(!this.userInfo) {
       this.userInfo = this.buildCookie();
     }
-    if(this.userInfo[index].hasFlagged === true) {
+    if(this.userInfo.rules[index].hasFlagged === true) {
       alert("You have already flagged this rule.")
       return;
     }
-    this.userInfo[index].hasFlagged = true;
+    this.userInfo.rules[index].hasFlagged = true;
     this.setCookie(this.movieFBKey, this.userInfo);
     Email.send({
       Host: 'smtp.elasticemail.com',
@@ -165,26 +157,26 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
   onVote(vote: number, rule: Rule, index: number){
     if(!this.userInfo){
       this.userInfo = this.buildCookie()
-      this.userInfo[index].hasVoted = true;
-      this.userInfo[index].vote = vote;
+      this.userInfo.rules[index].hasVoted = true;
+      this.userInfo.rules[index].vote = vote;
       this.setCookie(this.movieFBKey, this.userInfo)
       this.rulesArray[index].rating = rule.rating + vote;
     }else{
-      if(this.userInfo[index].hasVoted) {
-        if(this.userInfo[index].vote === vote) {
+      if(this.userInfo.rules[index].hasVoted) {
+        if(this.userInfo.rules[index].vote === vote) {
           this.rulesArray[index].rating = rule.rating - vote;
-          this.userInfo[index].vote = null;
-          this.userInfo[index].hasVoted = false;
+          this.userInfo.rules[index].vote = null;
+          this.userInfo.rules[index].hasVoted = false;
           this.setCookie(this.movieFBKey, this.userInfo)
         }else{
           this.rulesArray[index].rating = rule.rating + (vote*2);
-          this.userInfo[index].vote = vote;
+          this.userInfo.rules[index].vote = vote;
           this.setCookie(this.movieFBKey, this.userInfo)
         }
       }else{
         this.rulesArray[index].rating = rule.rating + vote;
-        this.userInfo[index].hasVoted = true;
-        this.userInfo[index].vote = vote;
+        this.userInfo.rules[index].hasVoted = true;
+        this.userInfo.rules[index].vote = vote;
         this.setCookie(this.movieFBKey, this.userInfo)
       }
     }
@@ -193,21 +185,43 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
       })
   }
 
-  buildCookie(): RuleCookie[] {
-    return this.rulesArray.map(() => {
-      return {
-        hasFlagged: false,
-        hasVoted: false,
-        vote: null
-      }
-    });
+  onWatchMovie(){
+    let viewCount = this.movie.viewCount;
+    this.userInfo = this.getCookie(this.movieFBKey);
+    if(!this.userInfo){
+      this.userInfo = this.buildCookie()
+    }
+    if(this.userInfo.expiration && this.userInfo.expiration > Date.now()) {
+      alert('You can only watch so many movies')
+    }else {
+      this.fbService
+        .movieViewed(this.movieFBKey, {viewCount: ++viewCount})
+        .subscribe(value => {
+          this.movie.viewCount = value.viewCount
+          this.userInfo.expiration = Date.now() + 120000
+          this.setCookie(this.movieFBKey, this.userInfo)
+        })
+    }
   }
 
-  getCookie(id: string): RuleCookie[]{
+  buildCookie(): Cookie {
+    return {
+      expiration: null,
+      rules: this.rulesArray.map(() => {
+        return {
+          hasFlagged: false,
+          hasVoted: false,
+          vote: null
+        }
+      })
+    };
+  }
+
+  getCookie(id: string): Cookie{
     return JSON.parse(localStorage.getItem(id));
   }
 
-  setCookie(id: string, cookie: RuleCookie[]){
+  setCookie(id: string, cookie: Cookie){
     localStorage.setItem(id, JSON.stringify(cookie));
   }
 }
