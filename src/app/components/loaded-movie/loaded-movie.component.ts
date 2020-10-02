@@ -124,10 +124,6 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
     );
   }
 
-  onRemoveRule(index: number) {
-    this.rulesArray.splice(index, 1);
-  }
-
   ngOnDestroy(): void {
     this.spinnerSub.unsubscribe();
     this.loadedMovieSub.unsubscribe();
@@ -154,35 +150,36 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
     }).then(res => console.log(res));
   }
 
-  onVote(vote: number, rule: Rule, index: number){
-    if(!this.userInfo){
-      this.userInfo = this.buildCookie()
-      this.userInfo.rules[index].hasVoted = true;
-      this.userInfo.rules[index].vote = vote;
-      this.setCookie(this.movieFBKey, this.userInfo)
-      this.rulesArray[index].rating = rule.rating + vote;
-    }else{
-      if(this.userInfo.rules[index].hasVoted) {
-        if(this.userInfo.rules[index].vote === vote) {
-          this.rulesArray[index].rating = rule.rating - vote;
-          this.userInfo.rules[index].vote = null;
-          this.userInfo.rules[index].hasVoted = false;
-          this.setCookie(this.movieFBKey, this.userInfo)
-        }else{
-          this.rulesArray[index].rating = rule.rating + (vote*2);
-          this.userInfo.rules[index].vote = vote;
-          this.setCookie(this.movieFBKey, this.userInfo)
-        }
-      }else{
-        this.rulesArray[index].rating = rule.rating + vote;
+  onVote(vote: number, index: number){
+    let rating: number;
+    this.fbService.getFBMovie(this.movieFBKey).subscribe(res => {
+      rating = res.rules[index].rating
+      if(!this.userInfo){
+        this.userInfo = this.buildCookie()
         this.userInfo.rules[index].hasVoted = true;
         this.userInfo.rules[index].vote = vote;
-        this.setCookie(this.movieFBKey, this.userInfo)
+        this.rulesArray[index].rating = rating + vote;
+      }else{
+        if(this.userInfo.rules[index].hasVoted) {
+          if(this.userInfo.rules[index].vote === vote) {
+            this.rulesArray[index].rating = rating - vote;
+            this.userInfo.rules[index].vote = null;
+            this.userInfo.rules[index].hasVoted = false;
+          }else{
+            this.rulesArray[index].rating = rating + (vote*2);
+            this.userInfo.rules[index].vote = vote;
+          }
+        }else{
+          this.rulesArray[index].rating = rating + vote;
+          this.userInfo.rules[index].hasVoted = true;
+          this.userInfo.rules[index].vote = vote;
+        }
       }
-    }
-    this.fbService.movieVoted(this.movieFBKey, {rules: this.rulesArray})
-      .subscribe(res => {
-      })
+      this.setCookie(this.movieFBKey, this.userInfo)
+      this.fbService.movieVoted(this.movieFBKey, {rules: this.rulesArray})
+        .subscribe(res => {
+        })
+    })
   }
 
   onWatchMovie(){

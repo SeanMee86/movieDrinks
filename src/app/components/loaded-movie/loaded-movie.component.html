@@ -27,11 +27,11 @@
         let i=index">{{rule.rule}}
         <div style="display: flex;align-items: center;">
         <fa-icon
-          (click)="onVote(1, rule, i)"
+          (click)="onVote(1, i)"
           [ngStyle]="{'color': userInfo && userInfo.rules[i].vote === 1 ? 'green' : 'inherit'}"
           [icon]="faThumbsUp"></fa-icon>
         <fa-icon
-          (click)="onVote(-1, rule, i)"
+          (click)="onVote(-1, i)"
           [ngStyle]="{'color': userInfo && userInfo.rules[i].vote === -1 ? 'red' : 'inherit'}"
           [icon]="faThumbsDown"></fa-icon>
         <fa-icon
@@ -39,13 +39,6 @@
           (click)="onFlagRule(movie.title, rule.rule, i)"
           [ngStyle]="{'color': userInfo && userInfo.rules[i].hasFlagged ? 'yellow' : 'inherit'}"
           [icon]="faFlag"></fa-icon>
-        <button
-          type="button"
-          class="close"
-          aria-label="Close"
-          (click)="onRemoveRule(i)">
-          <span aria-hidden="true">&times;</span>
-        </button>
         </div>
       </li>
     </ul>

@@ -53,6 +53,10 @@ export class FirebaseService {
     );
   }
 
+  getFBMovie(id: string) {
+    return this.http.get<Movie>(`${this.rootURL}/movies/${id}.json`)
+  }
+
   getMovie(id: string) {
     return this.fbMovies.find(fbMovie => {
       for (const key in fbMovie) {
