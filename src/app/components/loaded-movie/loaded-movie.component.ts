@@ -131,7 +131,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
 
   onFlagRule(movieTitle: string, rule: string, index: number) {
     if(!this.userInfo) {
-      this.userInfo = this.buildCookie();
+      this.userInfo = this.buildCookie(this.rulesArray);
     }
     if(this.userInfo.rules[index].hasFlagged === true) {
       alert("You have already flagged this rule.")
@@ -155,7 +155,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
     this.fbService.getFBMovie(this.movieFBKey).subscribe(res => {
       rating = res.rules[index].rating
       if(!this.userInfo){
-        this.userInfo = this.buildCookie()
+        this.userInfo = this.buildCookie(this.rulesArray)
         this.userInfo.rules[index].hasVoted = true;
         this.userInfo.rules[index].vote = vote;
         this.rulesArray[index].rating = rating + vote;
@@ -186,7 +186,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
     let viewCount = this.movie.viewCount;
     this.userInfo = this.getCookie(this.movieFBKey);
     if(!this.userInfo){
-      this.userInfo = this.buildCookie()
+      this.userInfo = this.buildCookie(this.rulesArray)
     }
     if(this.userInfo.expiration && this.userInfo.expiration > Date.now()) {
       alert('You can only watch so many movies')
@@ -201,10 +201,10 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
     }
   }
 
-  buildCookie(): Cookie {
+  buildCookie(rulesArray: Rule[]): Cookie {
     return {
       expiration: null,
-      rules: this.rulesArray.map(() => {
+      rules: rulesArray.map(() => {
         return {
           hasFlagged: false,
           hasVoted: false,
