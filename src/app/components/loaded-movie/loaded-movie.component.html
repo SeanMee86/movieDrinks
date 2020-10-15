@@ -19,29 +19,11 @@
         [disabled]="!newRule"
         type="button">Add Rule</button>
     </div>
-    <ul class="list-group">
-      <li
-        class="list-group-item rule"
-        [ngClass]="{'list-group-item-dark': i%2 === 0}"
-        *ngFor="let rule of rulesArray;
-        let i=index">{{rule.rule}}
-        <div style="display: flex;align-items: center;">
-        <fa-icon
-          (click)="onVote(1, i)"
-          [ngStyle]="{'color': userInfo && userInfo.rules[i].vote === 1 ? 'green' : 'inherit'}"
-          [icon]="faThumbsUp"></fa-icon>
-        <fa-icon
-          (click)="onVote(-1, i)"
-          [ngStyle]="{'color': userInfo && userInfo.rules[i].vote === -1 ? 'red' : 'inherit'}"
-          [icon]="faThumbsDown"></fa-icon>
-        <fa-icon
-          class="flag"
-          (click)="onFlagRule(movie.title, rule.rule, i)"
-          [ngStyle]="{'color': userInfo && userInfo.rules[i].hasFlagged ? 'yellow' : 'inherit'}"
-          [icon]="faFlag"></fa-icon>
-        </div>
-      </li>
-    </ul>
+    <app-movie-rules
+      [movie]="movie"
+      [movieFBKey]="movieFBKey"
+      [rulesArray]="rulesArray"
+      [userInfo]="userInfo"></app-movie-rules>
     <button
       type="button"
       class="btn btn-outline-success"

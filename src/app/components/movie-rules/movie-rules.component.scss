@@ -1,0 +1,19 @@
+.rule {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  fa-icon {
+    margin: 0 10px;
+    &:hover {
+      cursor: pointer;
+
+      &.flag {
+        color: red;
+      }
+
+      &:not(.flag) {
+        color: green;
+      }
+    }
+  }
+}

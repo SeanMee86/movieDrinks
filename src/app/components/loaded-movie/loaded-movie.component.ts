@@ -15,15 +15,9 @@ import { Movie } from '../../shared/models/movie.model';
 import { MovieService } from '../../shared/services/movie.service';
 import { UiService } from '../../shared/services/ui.service';
 import { FirebaseService } from '../../shared/services/firebase.service';
-import {
-  faFlag,
-  faThumbsDown,
-  faThumbsUp
-} from "@fortawesome/free-solid-svg-icons";
-import { Email } from '../../../assets/smtp';
 import { Rule } from '../../shared/models/rule.model'
-import { password } from "../../config/elasticEmailPassword";
-import {Cookie} from "../../shared/models/cookie.model";
+import {MovieCookie} from "../../shared/models/movie-cookie.model";
+import {CookieService} from "../../shared/services/cookie.service";
 
 @Component({
   selector: 'app-loaded-movie',
@@ -31,9 +25,6 @@ import {Cookie} from "../../shared/models/cookie.model";
   styleUrls: ['./loaded-movie.component.scss']
 })
 export class LoadedMovieComponent implements OnInit, OnDestroy {
-  faFlag = faFlag;
-  faThumbsUp = faThumbsUp;
-  faThumbsDown = faThumbsDown;
   movie: Movie;
   movieFBKey: string;
   id: string;
@@ -43,14 +34,15 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
   newRule: Rule = {rule: '', rating: 0};
   rulesArray: Rule[] = [];
   showModal = false;
-  userInfo: Cookie;
+  userInfo: MovieCookie;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private movieService: MovieService,
     private uiService: UiService,
-    private fbService: FirebaseService
+    private fbService: FirebaseService,
+    private cs: CookieService
   ) { }
 
   ngOnInit(): void {
@@ -68,7 +60,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
       value => {
         this.movie = value[Object.keys(value)[0]];
         this.movieFBKey = Object.keys(value)[0];
-        this.userInfo = this.getCookie(this.movieFBKey);
+        this.userInfo = this.cs.getMovieCookie(this.movieFBKey);
         if (this.movie.rules) {
           this.rulesArray = [...this.movie.rules];
         }
@@ -113,7 +105,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
     const updatedRules = this.movie.rules ? [...this.movie.rules, this.newRule] : [this.newRule];
     if(this.userInfo) {
       this.userInfo.rules.push({hasFlagged: false, hasVoted: false, vote: null});
-      this.setCookie(this.movieFBKey, this.userInfo);
+      this.cs.setMovieCookie(this.movieFBKey, this.userInfo);
     }
     this.fbService.updateMovie(this.movieFBKey, {rules: updatedRules}).subscribe(
       data => {
@@ -124,69 +116,11 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-    this.spinnerSub.unsubscribe();
-    this.loadedMovieSub.unsubscribe();
-  }
-
-  onFlagRule(movieTitle: string, rule: string, index: number) {
-    if(!this.userInfo) {
-      this.userInfo = this.buildCookie(this.rulesArray);
-    }
-    if(this.userInfo.rules[index].hasFlagged === true) {
-      alert("You have already flagged this rule.")
-      return;
-    }
-    this.userInfo.rules[index].hasFlagged = true;
-    this.setCookie(this.movieFBKey, this.userInfo);
-    Email.send({
-      Host: 'smtp.elasticemail.com',
-      Username: 'seanmeedev@gmail.com',
-      Password: password,
-      To: 'seanmeedev@gmail.com',
-      From: 'seanmeedev@gmail.com',
-      Subject: 'Flagged Rule',
-      Body: `${movieTitle} has flagged rule: ${rule}`
-    }).then(res => console.log(res));
-  }
-
-  onVote(vote: number, index: number){
-    let rating: number;
-    this.fbService.getFBMovie(this.movieFBKey).subscribe(res => {
-      rating = res.rules[index].rating
-      if(!this.userInfo){
-        this.userInfo = this.buildCookie(this.rulesArray)
-        this.userInfo.rules[index].hasVoted = true;
-        this.userInfo.rules[index].vote = vote;
-        this.rulesArray[index].rating = rating + vote;
-      }else{
-        if(this.userInfo.rules[index].hasVoted) {
-          if(this.userInfo.rules[index].vote === vote) {
-            this.rulesArray[index].rating = rating - vote;
-            this.userInfo.rules[index].vote = null;
-            this.userInfo.rules[index].hasVoted = false;
-          }else{
-            this.rulesArray[index].rating = rating + (vote*2);
-            this.userInfo.rules[index].vote = vote;
-          }
-        }else{
-          this.rulesArray[index].rating = rating + vote;
-          this.userInfo.rules[index].hasVoted = true;
-          this.userInfo.rules[index].vote = vote;
-        }
-      }
-      this.setCookie(this.movieFBKey, this.userInfo)
-      this.fbService.movieVoted(this.movieFBKey, {rules: this.rulesArray})
-        .subscribe(res => {
-        })
-    })
-  }
-
   onWatchMovie(){
     let viewCount = this.movie.viewCount;
-    this.userInfo = this.getCookie(this.movieFBKey);
+    this.userInfo = this.cs.getMovieCookie(this.movieFBKey);
     if(!this.userInfo){
-      this.userInfo = this.buildCookie(this.rulesArray)
+      this.userInfo = this.cs.buildMovieCookie(this.rulesArray)
     }
     if(this.userInfo.expiration && this.userInfo.expiration > Date.now()) {
       alert('You can only watch so many movies')
@@ -196,29 +130,13 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
         .subscribe(value => {
           this.movie.viewCount = value.viewCount
           this.userInfo.expiration = Date.now() + 120000
-          this.setCookie(this.movieFBKey, this.userInfo)
+          this.cs.setMovieCookie(this.movieFBKey, this.userInfo)
         })
     }
   }
 
-  buildCookie(rulesArray: Rule[]): Cookie {
-    return {
-      expiration: null,
-      rules: rulesArray.map(() => {
-        return {
-          hasFlagged: false,
-          hasVoted: false,
-          vote: null
-        }
-      })
-    };
-  }
-
-  getCookie(id: string): Cookie{
-    return JSON.parse(localStorage.getItem(id));
-  }
-
-  setCookie(id: string, cookie: Cookie){
-    localStorage.setItem(id, JSON.stringify(cookie));
+  ngOnDestroy(): void {
+    this.spinnerSub.unsubscribe();
+    this.loadedMovieSub.unsubscribe();
   }
 }

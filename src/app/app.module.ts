@@ -21,6 +21,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from "@angular/material/list";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { MovieRulesComponent } from './components/movie-rules/movie-rules.component';
 
 @NgModule({
   declarations: [
@@ -33,10 +34,11 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
     BrowseSidebarComponent,
     MainContentComponent,
     DashboardComponent,
-    BrowseMoviesComponent,
+    BrowseMoviesComponent, 
     LoadedMovieComponent,
     ModalComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    MovieRulesComponent
   ],
   imports: [
     FontAwesomeModule,
