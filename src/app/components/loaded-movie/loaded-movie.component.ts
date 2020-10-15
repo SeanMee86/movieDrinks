@@ -6,8 +6,7 @@ import {
 
 import {
   ActivatedRoute,
-  Params,
-  Router
+  Params
 } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -16,8 +15,8 @@ import { MovieService } from '../../shared/services/movie.service';
 import { UiService } from '../../shared/services/ui.service';
 import { FirebaseService } from '../../shared/services/firebase.service';
 import { Rule } from '../../shared/models/rule.model'
-import {MovieCookie} from "../../shared/models/movie-cookie.model";
-import {CookieService} from "../../shared/services/cookie.service";
+import { MovieCookie  } from "../../shared/models/movie-cookie.model";
+import { CookieService } from "../../shared/services/cookie.service";
 
 @Component({
   selector: 'app-loaded-movie',
@@ -38,7 +37,6 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private movieService: MovieService,
     private uiService: UiService,
     private fbService: FirebaseService,
@@ -58,6 +56,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
     );
     this.loadedMovieSub = this.fbService.loadMovie.subscribe(
       value => {
+        window.scrollTo(0,0);
         this.movie = value[Object.keys(value)[0]];
         this.movieFBKey = Object.keys(value)[0];
         this.userInfo = this.cs.getMovieCookie(this.movieFBKey);

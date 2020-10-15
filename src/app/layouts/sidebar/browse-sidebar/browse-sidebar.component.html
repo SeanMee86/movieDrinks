@@ -1,6 +1,8 @@
 <h3>Movie Categories</h3>
 <ul class="categoryList">
-  <li *ngFor="let category of categories" (click)="onCategorySelected(category.category)">
+  <li
+    *ngFor="let category of categories"
+    (click)="onCategorySelected(category.category)">
     {{category.category | titlecase}}: {{category.count}}
   </li>
 </ul>

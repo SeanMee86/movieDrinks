@@ -1,13 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { MovieService } from '../../shared/services/movie.service';
-import { Movie } from '../../shared/models/movie.model';
-import { Observable, Subject } from 'rxjs';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+
+import {
+  Observable,
+  Subject
+} from 'rxjs';
+
 import {
   debounceTime,
   distinctUntilChanged,
   switchMap
 } from 'rxjs/operators';
-import { ActivatedRoute, Router } from '@angular/router';
+
+import {
+  ActivatedRoute,
+  Router
+} from '@angular/router';
+
+import { MovieService } from '../../shared/services/movie.service';
+import { Movie } from '../../shared/models/movie.model';
 
 @Component({
   selector: 'app-movie-search',
@@ -15,6 +28,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./movie-search.component.scss']
 })
 export class MovieSearchComponent implements OnInit {
+
   movies$: Observable<Movie[]>;
   private searchTerms = new Subject<string>();
 

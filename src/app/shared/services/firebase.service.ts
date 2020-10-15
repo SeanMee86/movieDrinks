@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
+import {
+  map,
+  tap
+} from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { Movie } from '../models/movie.model';
-import {Rule} from "../models/rule.model";
+import { Rule } from "../models/rule.model";
 
 
 @Injectable({

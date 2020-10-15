@@ -1,4 +1,4 @@
-import {RuleCookie} from "./rule-cookie.model";
+import { RuleCookie } from "./rule-cookie.model";
 
 export interface MovieCookie {
   expiration?: number;

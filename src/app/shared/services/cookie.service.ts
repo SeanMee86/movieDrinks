@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {Rule} from "../models/rule.model";
-import {MovieCookie} from "../models/movie-cookie.model";
+import { Rule } from "../models/rule.model";
+import { MovieCookie } from "../models/movie-cookie.model";
 
 @Injectable({
   providedIn: 'root'

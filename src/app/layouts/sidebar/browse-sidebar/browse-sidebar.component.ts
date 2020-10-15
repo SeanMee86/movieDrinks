@@ -64,7 +64,6 @@ export class BrowseSidebarComponent implements OnInit{
   onSetCategories(movies: {[p: string]: Movie}[]){
     const catArray = movies
       .map(movie => movie[Object.keys(movie)[0]].category)
-      .sort()
       .stringCount();
     this.categories = catArray.map(cat => ({category: cat[0], count: cat.length}))
   }
