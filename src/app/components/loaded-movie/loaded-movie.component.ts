@@ -61,7 +61,7 @@ export class LoadedMovieComponent implements OnInit, OnDestroy {
         this.movieFBKey = Object.keys(value)[0];
         this.userInfo = this.cs.getMovieCookie(this.movieFBKey);
         if (this.movie.rules) {
-          this.rulesArray = [...this.movie.rules];
+          this.rulesArray = this.movie.rules.filter(rule => rule !== null);
         }
       }
     );
