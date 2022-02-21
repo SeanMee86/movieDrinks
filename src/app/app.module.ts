@@ -19,8 +19,8 @@ import { ModalComponent } from './components/ui/modal/modal.component';
 import { SpinnerComponent } from './components/ui/spinner/spinner.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
-import { MatListModule } from "@angular/material/list";
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { MatListModule } from '@angular/material/list';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MovieRulesComponent } from './components/movie-rules/movie-rules.component';
 
 @NgModule({
@@ -34,7 +34,7 @@ import { MovieRulesComponent } from './components/movie-rules/movie-rules.compon
     BrowseSidebarComponent,
     MainContentComponent,
     DashboardComponent,
-    BrowseMoviesComponent, 
+    BrowseMoviesComponent,
     LoadedMovieComponent,
     ModalComponent,
     SpinnerComponent,

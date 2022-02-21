@@ -11,7 +11,6 @@ const routes: Routes = [
   { path: 'movies/:id', component: LoadedMovieComponent },
   { path: 'browse', component: BrowseMoviesComponent },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
-
 ];
 
 @NgModule({

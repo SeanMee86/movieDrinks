@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
 
+type Route = {
+  link: string;
+  label: string;
+};
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -7,4 +12,14 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
   isCollapsed = true;
+  routes: Route[] = [
+    {
+      link: 'movies',
+      label: 'Find a Movie'
+    },
+    {
+      link: 'browse',
+      label: 'Browse Games'
+    }
+  ];
 }
